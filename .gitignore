@@ -1,0 +1,21 @@
+*.iml
+*.ipr
+*.iws
+.DS_Store
+.idea
+.tmp
+
+# Sublime Text
+*.sublime-*
+
+# Sublime PlainTasks
+TODO*
+
+# TextMate 2 project settings
+.tm_properties
+
+# Veewee
+veewee
+
+# Output.
+dist

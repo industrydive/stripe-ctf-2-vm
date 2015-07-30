@@ -1,0 +1,44 @@
+#!/bin/bash
+#
+# Run the server processes for a level.
+#
+# Usage: ctf-run <level>
+# E.g.: ctf-run 1
+#
+
+set -o nounset
+set -o errexit
+
+DIR="$( cd "$( dirname "$0" )" && pwd)"
+
+function usage () {
+  cat <<EOF
+This must run as root using sudo.
+
+sudo ${0} <level>
+E.g.: sudo ${0} 1
+EOF
+  exit 1
+}
+
+# Check arguments.
+if [[ "${#}" -ne "1" ]]; then
+  usage
+fi
+
+# Must be run as root via sudo.
+if [[ "${EUID}" -ne "0" ]]; then
+  usage
+fi
+
+# Check for unlock file presence.
+LEVEL="${1}"
+LEVELS_DIR="/var/ctf/levels"
+UNLOCK_FILE="${LEVELS_DIR}/${LEVEL}.unlocked"
+
+if [[ ! -f "${UNLOCK_FILE}" ]]; then
+  echo "Level ${LEVEL} is not yet unlocked."
+  exit 1
+fi
+
+"${LEVELS_DIR}/${LEVEL}/ctf-run.sh"
