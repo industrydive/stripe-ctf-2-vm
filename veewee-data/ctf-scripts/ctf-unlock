@@ -1,0 +1,40 @@
+#!/bin/bash
+#
+# Unlock a level.
+#
+# Usage: ctf-unlock <level> <password>
+# E.g.: ctf-unlock 1 not-the-real-password
+#
+
+set -o nounset
+set -o errexit
+
+DIR="$( cd "$( dirname "$0" )" && pwd)"
+
+function usage () {
+  cat <<EOF
+${0} <level> <password>
+E.g.: ${0} 1 not-the-real-password
+EOF
+  exit 1
+}
+
+# Check arguments.
+if [[ "${#}" -ne "2" ]]; then
+  usage
+fi
+
+LEVEL="${1}"
+PASSWORD="${2}"
+
+echo "${PASSWORD}" > "/tmp/${LEVEL}.pwd"
+
+if sudo ctf-check-pass ${LEVEL}; then
+  # This will spawn a prompt if the password is incorrect because of sudoer
+  # rules being strict, but the ctf-check-pass should prevent that from being
+  # an issue.
+  sudo ctf-unlocker "${LEVEL}" "${PASSWORD}"
+  echo "Level ${LEVEL} unlocked"
+else
+  exit 1
+fi

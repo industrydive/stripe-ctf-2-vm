@@ -1,0 +1,47 @@
+#!/bin/bash
+#
+# Expect pass to check written to /tmp/1.pwd
+#
+# Usage: ${0} <level>
+#
+
+set -o nounset
+set -o errexit
+
+# Must be run as root via sudo.
+if [[ "${EUID}" -ne "0" ]]; then
+  echo "${0} requires sudo."
+  exit 1
+fi
+
+# Check arguments.
+if [[ "${#}" -ne "1" ]]; then
+  exit 1
+fi
+
+LEVEL="${1}"
+LEVELS_DIR="/var/ctf/levels"
+PASS_FILE="${LEVELS_DIR}/${LEVEL}.pwd"
+CHECK_PASS_FILE="/tmp/${LEVEL}.pwd"
+
+# Is LEVEL valid?
+if [ ! -f "${PASS_FILE}" ]; then
+  echo "Invalid level provided: ${LEVEL}"
+  exit 1
+fi
+
+# Is PASSWORD valid?
+#
+# Get the actual password minus whitespace.
+PASS=`cat "${PASS_FILE}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'`
+CHECK_PASS=`cat "${CHECK_PASS_FILE}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'`
+rm -f "${CHECK_PASS_FILE}"
+
+if [ "${PASS}" == "${CHECK_PASS}" ]; then
+  exit 0
+else
+  echo "Invalid password."
+  exit 1
+fi
+
+

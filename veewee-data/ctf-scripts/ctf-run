@@ -1,0 +1,49 @@
+#!/bin/bash
+#
+# Run the server processes for a level.
+#
+# Usage: ctf-run <level>
+# E.g.: ctf-run 1
+#
+
+set -o nounset
+set -o errexit
+
+DIR="$( cd "$( dirname "$0" )" && pwd)"
+
+function usage () {
+  cat <<EOF
+${0} <level>
+E.g.: ${0} 1
+EOF
+  exit 1
+}
+
+# Check arguments.
+if [[ "${#}" -ne "1" ]]; then
+  usage
+fi
+
+# Check for unlock file presence.
+LEVEL="${1}"
+
+if sudo ctf-check-unlocked "${LEVEL}"; then
+  # Level 1 allows abusing of file upload from user-specified path.
+  #
+  # Level 2 is a special case because its exploit allows compromising all files
+  # in the levels unless it is running as a user with limited permissions.
+  #
+  # The CTF_RUN_1_USER and CTF_RUN_2_USER string will be replaced with the real
+  # value during provisioning.
+  if [ "${LEVEL}" -eq "1" ]; then
+    sudo -u CTF_RUN_1_USER bash -c "/var/ctf/levels/${LEVEL}/ctf-run.sh"
+  elif [ "${LEVEL}" -eq "2" ]; then
+    sudo -u CTF_RUN_2_USER bash -c "/var/ctf/levels/${LEVEL}/ctf-run.sh"
+  else
+    sudo "/var/ctf/levels/${LEVEL}/ctf-run.sh"
+  fi
+else
+  echo "Level ${LEVEL} is not yet unlocked."
+  exit 1
+fi
+

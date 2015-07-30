@@ -1,0 +1,37 @@
+#!/bin/bash
+#
+# Unlock a level.
+#
+# Usage: ${0} <level> <password>
+# E.g.: ${0} 1 not-the-real-password
+#
+
+# Must be run as root via sudo.
+if [[ "${EUID}" -ne "0" ]]; then
+  echo "${0} requires sudo."
+  exit 1
+fi
+
+set -o nounset
+set -o errexit
+
+DIR="$( cd "$( dirname "$0" )" && pwd)"
+
+# Check arguments.
+if [[ "${#}" -ne "2" ]]; then
+  "Usage: ${0} <level> <password>"
+  exit 1
+fi
+
+LEVEL="${1}"
+PASSWORD="${2}"
+
+echo "${PASSWORD}" > "/tmp/${LEVEL}.pwd"
+
+# We need the additional layer of checking to stop people accessing this file
+# on its own.
+if ctf-check-pass ${LEVEL}; then
+  touch "/var/ctf/levels/${LEVEL}.unlocked"
+else
+  exit 1
+fi

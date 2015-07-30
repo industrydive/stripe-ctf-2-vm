@@ -1,0 +1,29 @@
+#!/bin/bash
+#
+# Check to see if a level is unlocked.
+#
+# Usage: ctf-check-unlocked <level>
+
+set -o nounset
+set -o errexit
+
+# Must be run as root via sudo.
+if [[ "${EUID}" -ne "0" ]]; then
+  echo "${0} requires sudo."
+  exit 1
+fi
+
+# Check arguments.
+if [[ "${#}" -ne "1" ]]; then
+  exit 1
+fi
+
+LEVEL="${1}"
+LEVELS_DIR="/var/ctf/levels"
+UNLOCK_FILE="${LEVELS_DIR}/${LEVEL}.unlocked"
+
+if [ -f "${UNLOCK_FILE}" ]; then
+  exit 0
+else
+  exit 1
+fi
