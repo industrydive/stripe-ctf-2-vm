@@ -7,6 +7,6 @@ You may even be able to find the password for Level 3 by doing so.
 
 # To Run
 
-* Run `sudo ctf-run 2` to start the server on port 7000.
+* Run `ctf-run 2` to start the server on port 7000.
 * Go to [http://192.168.57.2:7000](http://192.168.57.2:7000) in your browser.
-* Run `sudo ctf-halt 2` to stop the server.
+* Run `ctf-halt 2` to stop the server.

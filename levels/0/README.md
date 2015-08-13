@@ -7,6 +7,6 @@ knew how to [crack safes](http://en.wikipedia.org/wiki/Safe-cracking)...
 
 # Running
 
-- Run `sudo ctf-run 0` to start the server on port 3000.
+- Run `ctf-run 0` to start the server on port 3000.
 - Go to [http://192.168.57.2:3000](http://192.168.57.2:3000) in your browser.
-- Run `sudo ctf-halt 0` to stop the server.
+- Run `ctf-halt 0` to stop the server.

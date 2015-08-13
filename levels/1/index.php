@@ -24,7 +24,7 @@
         }
       }
     ?>
-    <form action="#" method="GET">
+    <form action="/index.php" method="GET">
       <p><input type="text" name="attempt"></p>
       <p><input type="submit" value="Guess!"></p>
     </form>
