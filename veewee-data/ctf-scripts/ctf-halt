@@ -13,10 +13,8 @@ DIR="$( cd "$( dirname "$0" )" && pwd)"
 
 function usage () {
   cat <<EOF
-This must run as root using sudo.
-
-sudo ${0} <level>
-E.g.: sudo ${0} 1
+${0} <level>
+E.g.: ${0} 1
 EOF
   exit 1
 }
@@ -26,19 +24,12 @@ if [[ "${#}" -ne "1" ]]; then
   usage
 fi
 
-# Must be run as root via sudo.
-if [[ "${EUID}" -ne "0" ]]; then
-  usage
-fi
-
 # Check for unlock file presence.
 LEVEL="${1}"
-LEVELS_DIR="/var/ctf/levels"
-UNLOCK_FILE="${LEVELS_DIR}/${LEVEL}.unlocked"
 
-if [[ ! -f "${UNLOCK_FILE}" ]]; then
+if sudo ctf-check-unlocked "${LEVEL}"; then
+  sudo "/var/ctf/levels/${LEVEL}/ctf-halt.sh"
+else
   echo "Level ${LEVEL} is not yet unlocked."
   exit 1
 fi
-
-"${LEVELS_DIR}/${LEVEL}/ctf-halt.sh"

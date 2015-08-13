@@ -17,9 +17,6 @@ ADMIN_USER_PASS="ubuntu"
 CTF_USER="ctf"
 CTF_USER_PASS="ctf"
 
-# Where are we putting the CTF contents in the VM?
-CTF_DIR="/var/ctf"
-
 # VM details.
 #
 # IP address and gateway address for the hostonly adaptor.

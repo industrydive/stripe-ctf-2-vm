@@ -42,7 +42,7 @@ context, and start the service running with the following command while logged
 in to the VM:
 
 ```
-sudo ctf-run 0
+ctf-run 0
 ```
 
 ## Unlocking the Next Level
@@ -51,7 +51,7 @@ When you have obtained the password to the next level, you can unlock that level
 by logging into the VM to use the `ctf-unlock` script.
 
 ```
-sudo ctf-unlock <level> <password>
+ctf-unlock <level> <password>
 ```
 
 You can only run the services for a level once it is unlocked in this was, and
@@ -62,13 +62,13 @@ unlocking requires the password.
 To run the server for a given level:
 
 ```
-sudo ctf-run <level>
+ctf-run <level>
 ```
 
 To halt it:
 
 ```
-sudo ctf-halt <level>
+ctf-halt <level>
 ```
 
 ## Rules of Engagement

@@ -19,6 +19,8 @@ echo "---------------------------------------------------------------"
 # This has been uploaded during the before_postinstall Veewee step.
 source /tmp/environment.sh
 
+CTF_DIR="/var/ctf"
+
 # --------------------------------------------------------------------------
 # Add keys to the admin users.
 # --------------------------------------------------------------------------
@@ -146,6 +148,17 @@ export PATH="${PATH}:/usr/local/bin"
 EOF
 
 # --------------------------------------------------------------------------
+# Create the passwords.
+# --------------------------------------------------------------------------
+
+PASSWORDS=( "" "" "" "" "" "" "" "" "" )
+for LEVEL in {1..9}; do
+  # Useful for testing
+  # ${PASSWORDS[${LEVEL}]}="test-${LEVEL}"
+  PASSWORDS[${LEVEL}]=`uuid -v4`
+done
+
+# --------------------------------------------------------------------------
 # Sudoers.
 # --------------------------------------------------------------------------
 
@@ -153,12 +166,28 @@ echo "---------------------------------------------------------------"
 echo "Set up sudo permissions."
 echo "---------------------------------------------------------------"
 
+SUDOERS_FILE="/etc/sudoers.d/ctf"
+
 # Let the ctf user use sudo for the ctf scripts.
 # Let the admin user have passwordless sudo.
-cat > /etc/sudoers.d/ctf <<EOF
-${CTF_USER} ALL=(ALL) NOPASSWD: /usr/local/bin/ctf-root, /usr/local/bin/ctf-run, /usr/local/bin/ctf-halt
+cat >> "${SUDOERS_FILE}" <<EOF
 ${ADMIN_USER} ALL=(ALL) NOPASSWD: ALL
 EOF
+
+# Wildcards are too hard to control in sudoers files, so specify the exact
+# commands we'll accept.
+for LEVEL in {0..8}; do
+cat >> "${SUDOERS_FILE}" <<EOF
+${CTF_USER} ALL=(ALL) NOPASSWD: /usr/local/bin/ctf-unlocker ${LEVEL} ${PASSWORDS[$LEVEL]}
+${CTF_USER} ALL=(ALL) NOPASSWD: /usr/local/bin/ctf-check-pass ${LEVEL}
+${CTF_USER} ALL=(ALL) NOPASSWD: /usr/local/bin/ctf-check-unlocked ${LEVEL}
+${CTF_USER} ALL=(ALL) NOPASSWD: /var/ctf/levels/${LEVEL}/ctf-run.sh
+${CTF_USER} ALL=(ALL) NOPASSWD: /var/ctf/levels/${LEVEL}/ctf-halt.sh
+EOF
+done
+
+# Stop the user from reading this file since it has passwords in it.
+chmod 600 "${SUDOERS_FILE}"
 
 # --------------------------------------------------------------------------
 # Set up the levels; each level has the next level's password.
@@ -178,11 +207,7 @@ LEVELS_DIR="${CTF_DIR}/levels"
 # Write passwords and set up levels. Levels are 0-8, each level is set up to
 # contain the password of the level above. Level 8 is the end, but contains a
 # password for winning.
-PASSWORDS=( "" "" "" "" "" "" "" "" "" )
 for LEVEL in {1..9}; do
-  # Useful for testing
-  # ${PASSWORDS[${LEVEL}]}="test-${LEVEL}"
-  PASSWORDS[${LEVEL}]=$(uuid)
   echo "Level ${LEVEL}: ${PASSWORDS[${LEVEL}]}" >> "${CTF_DIR}/passwords.txt"
   echo "${PASSWORDS[${LEVEL}]}" > "${LEVELS_DIR}/${LEVEL}.pwd"
 

@@ -57,9 +57,12 @@ Veewee::Definition.declare({
       # Configuration for provisioning.
       definition.box.scp(path + '/environment.sh', '/tmp/environment.sh')
       # Copy up the scripts to be used by the CTF user.
+      definition.box.scp(path + '/ctf-check-pass', '/tmp/ctf-check-pass');
+      definition.box.scp(path + '/ctf-check-unlocked', '/tmp/ctf-check-unlocked');
       definition.box.scp(path + '/ctf-halt', '/tmp/ctf-halt');
       definition.box.scp(path + '/ctf-run', '/tmp/ctf-run');
       definition.box.scp(path + '/ctf-unlock', '/tmp/ctf-unlock');
+      definition.box.scp(path + '/ctf-unlocker', '/tmp/ctf-unlocker');
       # Copy up the SSH public key.
       definition.box.scp(path + '/id_rsa.pub', '/tmp/id_rsa.pub');
     }

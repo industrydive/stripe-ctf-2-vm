@@ -12,7 +12,7 @@ PIDFILE="${DIR}/pidfile"
 if [ -f "${PIDFILE}" ]; then
   echo "Level is already running."
 else
-  php -t "${DIR}" -S 0.0.0.0:8000 "${DIR}/routing.php" > "${DIR}/phpserver.log" 2>&1 &
+  php -t "${DIR}" -S 0.0.0.0:7000 "${DIR}/routing.php" > "${DIR}/phpserver.log" 2>&1 &
   echo $! > "${DIR}/pidfile"
   echo "Level is now running."
 fi
