@@ -23,3 +23,14 @@ PLANS=`uuid -v4`
 sed -i \
   "s/'dummy-password', 'dummy-proof', 'dummy-plans'/'${PASSWORD}', '${PROOF}', '${PLANS}'/" \
   "${DIR}/secretvault.py"
+
+# Sort out the secrets file.
+sed -i \
+  "s/dummy-proof/${PROOF}/" \
+  "${DIR}/data/secrets.json"
+sed -i \
+  "s/dummy-plans/${PLANS}/" \
+  "${DIR}/data/secrets.json"
+sed -i \
+  "s/dummy-password/${PASSWORD}/" \
+  "${DIR}/data/secrets.json"

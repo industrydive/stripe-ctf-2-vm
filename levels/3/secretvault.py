@@ -44,16 +44,6 @@ app.logger.addHandler(logging.StreamHandler(sys.stderr))
 # use persistent entropy file for secret_key
 app.secret_key = open(os.path.join(data_dir, 'entropy.dat')).read()
 
-# Allow setting url_root if needed
-try:
-    from local_settings import url_root
-except ImportError:
-    pass
-
-def absolute_url(path):
-    print "in abs url: " + (url_root + path)
-    return url_root + path
-
 @app.route('/')
 def index():
     try:
@@ -68,7 +58,7 @@ def index():
 @app.route('/logout')
 def logout():
     flask.session.pop('user_id', None)
-    return flask.redirect(absolute_url('/'))
+    return flask.redirect('/')
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -98,7 +88,7 @@ def login():
         return "That's not the password for {0}!\n".format(username)
 
     flask.session['user_id'] = user_id
-    return flask.redirect(absolute_url('/'))
+    return flask.redirect('/')
 
 if __name__ == '__main__':
     # In development: app.run(debug=True)
