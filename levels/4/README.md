@@ -6,19 +6,21 @@ think are doing good in the world. In order to ensure you're transferring karma
 only to good people, transferring karma to a user will also reveal your
 password to him or her.
 
-The very active user **karma_fountain** has infinite karma, making it a ripe
+The very active user `karma_fountain` has infinite karma, making it a ripe
 account to obtain (no one will notice a few extra karma trades here and there).
-The password for **karma_fountain**'s account will give you access to Level 5.
+The password for `karma_fountain`'s account will give you access to Level 5.
 
-# To run
+For the purposes of this test the `karma_foundation` user is active via the web
+interface every 30 seconds, using a script, [CasperJS][1], and [PhantomJS][2] to
+simulate human activity.
 
-- Install bundler: `gem install bundler`
-- Run srv.rb: `./srv.rb`
-- Point your browser to [http://localhost:4567](http://localhost:4567)
+# To Run
 
-## Karma Fountain
+* Run `ctf-run 4` to start the server on port 4567, and start the activities of
+the `karma_foundation` user.
+* Go to [http://192.168.57.2:4567](http://192.168.57.2:4567) in your browser.
+* Run `ctf-halt 4` to stop the server and the `karma_foundation` user
+activities.
 
-We used [CapserJS](http://casperjs.org/) on top of
-[PhantomJS](http://phantomjs.org/) to power the **karma_fountain** user. Run
-`capserjs browser.coffee http://localhost:4567` to start it up. It expects to
-find the password from the filesystem `public_html/password.txt`.
+[1]: http://casperjs.org
+[2]: http://phantomjs.org

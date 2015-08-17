@@ -20,10 +20,9 @@ system = require 'system'
 utils = require 'utils'
 fs = require 'fs'
 
-
 if not casper.cli.has(0)
-    console.log 'Usage: browser.coffee <url to visit>'
-    casper.exit 1
+  console.log 'Usage: browser.coffee <url to visit>'
+  casper.exit 1
 
 password = fs.open('password.txt', 'r').read().trim()
 
@@ -37,7 +36,7 @@ casper.start page_address, ->
 
 casper.then ->
   # Log the page title.
-  console.log "On the main page"
+  console.log "On the main page, provided login worked."
 
   page_title = @getTitle()
   page_url = @getCurrentUrl()
@@ -46,6 +45,8 @@ casper.then ->
   credits = @evaluate ->
     return document.querySelectorAll('p')[1].innerHTML
 
+  # Will break here if login fails, i.e. if the test setup was incorrect,
+  # because it is still on the login page, not the main page.
   credits_left = credits.match /-?\d+/
   console.log "Guard Llama has #{credits_left} credits left"
 

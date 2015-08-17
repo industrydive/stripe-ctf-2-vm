@@ -12,7 +12,7 @@ PIDFILE="${DIR}/pidfile"
 if [ -f "${PIDFILE}" ]; then
   PID=`cat "${PIDFILE}"`
   rm -f "${PIDFILE}"
-  kill -9 ${PID}
+  kill -9 ${PID} || true
   echo "Level is now halted."
 else
   echo "Level is already halted."

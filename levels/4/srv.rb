@@ -13,9 +13,6 @@ module KarmaTrader
   STARTING_KARMA = 500
   KARMA_FOUNTAIN = 'karma_fountain'
 
-  # Only needed in production
-  URL_ROOT = File.read('url_root.txt').strip rescue ''
-
   module DB
     def self.db_file
       'karma.db'
@@ -66,17 +63,6 @@ module KarmaTrader
       end
     end
     set :session_secret, File.read(entropy_file)
-
-    helpers do
-      def absolute_url(path)
-        KarmaTrader::URL_ROOT + path
-      end
-    end
-
-    # Hack to make this work with a URL root
-    def redirect(url)
-      super(absolute_url(url))
-    end
 
     def die(msg, view)
       @error = msg
@@ -170,7 +156,7 @@ module KarmaTrader
         :password => password,
         :karma => STARTING_KARMA,
         :last_active => Time.now.utc
-        )
+      )
       session[:user] = username
       redirect '/'
     end
@@ -218,12 +204,13 @@ module KarmaTrader
       end
 
       DB.conn[:transfers].insert(:from => from, :to => to, :amount => amount)
-      DB.conn[:users].where(:username=>from).update(:karma => :karma - amount)
-      DB.conn[:users].where(:username=>to).update(:karma => :karma + amount)
+      to_user = DB.conn[:users][:username => to]
+      from_user = DB.conn[:users][:username => from]
+      DB.conn[:users].where(:username => from).update(:karma => from_user[:karma].to_i - amount)
+      DB.conn[:users].where(:username => to).update(:karma => to_user[:karma].to_i + amount)
 
       refresh_state
-      @success = "You successfully transfered #{amount} karma to" +
-                 " #{to.inspect}."
+      @success = "You successfully transfered #{amount} karma to #{to.inspect}."
       erb :home
     end
 

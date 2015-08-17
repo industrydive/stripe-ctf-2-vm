@@ -68,6 +68,7 @@ apt-get install -y \
   nmap \
   python-dev \
   sqlite3 \
+  libsqlite3-dev \
   unzip \
   uuid \
   zip
@@ -97,6 +98,29 @@ make install
 n -q 0.10.28
 
 # --------------------------------------------------------------------------
+# Install PhantomJS and CasperJS.
+# --------------------------------------------------------------------------
+
+echo "---------------------------------------------------------------"
+echo "Installing CasperJS and PhantomJS..."
+echo "---------------------------------------------------------------"
+
+# PhantomJS will silently fail without libfontconfig1-dev.
+apt-get install -y libfontconfig1-dev
+
+# The Ghostdriver PhantomJS webdriver interface creates its log at
+# /phantomjsdriver.log by default.
+#
+# So create the file and give it lenient permissions so that things don't fail.
+touch /phantomjsdriver.log
+chmod 666 /phantomjsdriver.log
+
+# Install CasperJS and PhantomJS via NPM. CasperJS pulls in PhantomJS as a
+# dependency, but doesn't seem to correctly sort out everything needed with
+# paths, etc. So install it direclty as well.
+npm install -g --loglevel=info casperjs phantomjs
+
+# --------------------------------------------------------------------------
 # Install necessary packages serving PHP.
 # --------------------------------------------------------------------------
 
@@ -105,6 +129,17 @@ echo "Installing PHP command line..."
 echo "---------------------------------------------------------------"
 
 apt-get install -y php5-cli
+
+# --------------------------------------------------------------------------
+# Get Ruby installed and sorted out.
+# --------------------------------------------------------------------------
+
+# This gives Ruby 1.9.1 plus rubygems and necessary items for building and
+# bundling.
+apt-get install -y \
+  bundler \
+  ruby1.9.1-dev \
+  rubygems-integration
 
 # --------------------------------------------------------------------------
 # Install Python and Flask.

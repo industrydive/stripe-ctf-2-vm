@@ -25,7 +25,7 @@
 </p>
 
 <p>See below for a list of all registered usernames.</p>
-<form action="<%= absolute_url('/transfer') %>" method="POST">
+<form action="/transfer" method="POST">
   <p>To: <input type="to" name="to" /></p>
   <p>Amount of karma: <input type="text" name="amount" /></p>
   <p><input type="submit" value="Submit" /></p>
@@ -71,4 +71,4 @@
   <% end %>
 </ul>
 
-<p><a href="<%= absolute_url('/logout') %>">Log out</a></p>
+<p><a href="/logout">Log out</a></p>
