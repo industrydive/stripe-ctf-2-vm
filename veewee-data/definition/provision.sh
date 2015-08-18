@@ -150,7 +150,14 @@ echo "Installing Python and Python tools..."
 echo "---------------------------------------------------------------"
 
 apt-get -y install python-setuptools python-pip
-pip install flask flup
+pip install --upgrade pip
+pip install --upgrade virtualenv
+pip install --upgrade setuptools
+pip install \
+  flask \
+  flup \
+  py-bcrypt \
+  requests
 
 # --------------------------------------------------------------------------
 # Create the CTF user.
@@ -166,6 +173,18 @@ fi
 echo "${CTF_USER}:${CTF_USER_PASS}" | chpasswd
 
 # --------------------------------------------------------------------------
+# Create the CTF_RUN_2 user.
+# --------------------------------------------------------------------------
+
+echo "---------------------------------------------------------------"
+echo "Creating ${CTF_RUN_2_USER} user..."
+echo "---------------------------------------------------------------"
+
+if ! (id -u "${CTF_RUN_2_USER}" >/dev/null 2>&1) ; then
+  useradd -m "${CTF_RUN_2_USER}" -s /bin/bash
+fi
+
+# --------------------------------------------------------------------------
 # Sort out the ctf-* scripts, move them from where they were placed.
 # --------------------------------------------------------------------------
 
@@ -176,6 +195,11 @@ echo "---------------------------------------------------------------"
 cp /tmp/ctf-* /usr/local/bin
 chown root:root /usr/local/bin/ctf-*
 chmod a+x /usr/local/bin/ctf-*
+
+# ctf-run needs some replacement to insert the name of the run user for level 2.
+sed -i \
+  "s/CTF_RUN_2_USER/${CTF_RUN_2_USER}/" \
+  /usr/local/bin/ctf-run
 
 # Amend the path to include the location for the ctf-* scripts.
 cat > /etc/profile.d/ctf <<EOF
@@ -232,12 +256,18 @@ echo "---------------------------------------------------------------"
 echo "Setting up CTF level code with passwords..."
 echo "---------------------------------------------------------------"
 
+LEVELS_DIR="${CTF_DIR}/levels"
+
 # Unzip the code.
 rm -Rf "${CTF_DIR}"
 mkdir -p "${CTF_DIR}"
 unzip -o -q /tmp/levels.zip -d "${CTF_DIR}"
 
-LEVELS_DIR="${CTF_DIR}/levels"
+# Give the ${CTF_USER} a copy of the levels prior to the setup. Since some of
+# the later levels recommend running the thing locally, seems sensible.
+rm -Rf "/home/${CTF_USER}/levels"
+cp -r "${LEVELS_DIR}" "/home/${CTF_USER}"
+chown -R "${CTF_USER}:${CTF_USER}" "/home/${CTF_USER}/levels"
 
 # Write passwords and set up levels. Levels are 0-8, each level is set up to
 # contain the password of the level above. Level 8 is the end, but contains a
@@ -265,6 +295,9 @@ echo "---------------------------------------------------------------"
 # We want to exclude the ctf user from looking at this stuff, while allowing
 # other users to do so.
 chmod -R o-rwx "${CTF_DIR}"
+
+# Level 2 needs to be owned by a different user to keep it safe.
+chown -R "${CTF_RUN_2_USER}:${CTF_RUN_2_USER}" "${CTF_DIR}/levels/2"
 
 # --------------------------------------------------------------------------
 # Clean up things we don't want the ctf user to be able to see.

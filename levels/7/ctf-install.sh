@@ -14,5 +14,5 @@ fi
 DIR="$( cd "$( dirname "$0" )" && pwd)"
 PASSWORD="${1}"
 
-
-# TODO
+cd "${DIR}"
+python ./initialize_db.py ${PASSWORD}

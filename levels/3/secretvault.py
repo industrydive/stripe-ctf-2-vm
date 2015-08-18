@@ -90,6 +90,5 @@ def login():
     flask.session['user_id'] = user_id
     return flask.redirect('/')
 
-if __name__ == '__main__':
-    # In development: app.run(debug=True)
-    app.run(host=url_root)
+if __name__ == '__main__':\
+    app.run(host='0.0.0.0')

@@ -139,10 +139,12 @@ def makeRequest(address_spec, data, callback, errback):
         errback(address_spec, error)
 
     host, port = address_spec
-    factory = client.HTTPClientFactory('/',
-                                       agent='PasswordChunker',
-                                       method='POST',
-                                       postdata=json.dumps(data))
+    factory = client.HTTPClientFactory(
+        '/',
+        agent='PasswordChunker',
+        method='POST',
+        postdata=json.dumps(data)
+    )
     factory.deferred.addCallback(callback)
     factory.deferred.addErrback(wrapper)
     reactor.connectTCP(host, port, factory)

@@ -17,6 +17,10 @@ ADMIN_USER_PASS="ubuntu"
 CTF_USER="ctf"
 CTF_USER_PASS="ctf"
 
+# The user for running level 2, which needs to be kept in isolation to prevent
+# breaking the whole test server via its exploit.
+CTF_RUN_2_USER="ctf-2"
+
 # VM details.
 #
 # IP address and gateway address for the hostonly adaptor.

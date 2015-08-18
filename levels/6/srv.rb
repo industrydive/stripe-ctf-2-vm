@@ -11,9 +11,6 @@ require 'sinatra'
 module Streamer
   PASSWORD = File.read('password.txt').strip
 
-  # Only needed in production
-  URL_ROOT = File.read('url_root.txt').strip rescue ''
-
   module DB
     def self.db_file
       'streamer.db'
@@ -92,10 +89,6 @@ machine, for example, can only talk directly to the Streamer server itself!",
     use Rack::Csrf, :raise => true
 
     helpers do
-      def absolute_url(path)
-        Streamer::URL_ROOT + path
-      end
-
       # Insert an hidden tag with the anti-CSRF token into your forms.
       def csrf_tag
         Rack::Csrf.csrf_tag(env)
@@ -116,7 +109,7 @@ machine, for example, can only talk directly to the Streamer server itself!",
     end
 
     def redirect(url)
-      super(absolute_url(url))
+      super(url)
     end
 
     before do

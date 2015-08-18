@@ -1,15 +1,7 @@
 Veewee::Session.declare({
   :cpu_count => '1',
   :memory_size => '1024',
-  # 16GB disk size, keep things portable.
-  #
-  # Note! By the way virtualbox works, if you make this too small files will
-  # appear to be created during provisioning but will then just be thrown away
-  # after the fact when the box is shut down.
-  #
-  # So this disk size seems large, but once compressed down for export it'll be
-  # much smaller.
-  :disk_size => '16384',
+  :disk_size => '65536',
   :disk_format => 'VDI',
   :hostiocache => 'off',
   :os_type_id => 'Ubuntu_64',

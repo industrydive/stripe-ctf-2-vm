@@ -17,13 +17,14 @@ if [ -f "${HOME}/.bash_profile" ]; then
   source "${HOME}/.bash_profile"
 fi
 
-# This exports a zip file to veewee/${DEF_NAME}.box.
+cd "${PROJECT_DIR}/veewee"
+# This exports a tar archive file to veewee/${DEF_NAME}.box.
 bundle exec veewee vbox export "${DEF_NAME}"
 
-# Move the zip file.
+# Move the tar file to make it clear what it is.
 DIST_DIR="${PROJECT_DIR}/dist"
 VM_SOURCE="${PROJECT_DIR}/veewee/${DEF_NAME}.box"
-VM_DEST="${PROJECT_DIR}/dist/${DEF_NAME}.zip"
+VM_DEST="${PROJECT_DIR}/dist/${DEF_NAME}.tar"
 
 mkdir -p "${DIST_DIR}"
 rm -f "${VM_DEST}"

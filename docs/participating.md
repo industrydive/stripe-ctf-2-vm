@@ -71,6 +71,12 @@ To halt it:
 ctf-halt <level>
 ```
 
+## Investigating the Level Code
+
+If you log into the VM you'll find a copy of the level code in your home
+directory. Some of the levels suggest that you might want to run the code
+locally to get a better idea as to how to break it. You can do this in the VM.
+
 ## Rules of Engagement
 
 ### Be Inventive

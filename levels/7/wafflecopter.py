@@ -48,14 +48,11 @@ def log_in(user, row):
     session['user'] = row
     session['username'] = user
 
-def absolute_url(path):
-    return path #settings.url_root + path
-
 def require_authentication(func):
     @wraps(func)
     def newfunc(*args, **kwargs):
         if 'user' not in session:
-            return redirect(absolute_url('/login'))
+            return redirect('/login')
         return func(*args, **kwargs)
     return newfunc
 
@@ -109,7 +106,7 @@ def login():
         row = valid_user(user, password)
         if row:
             log_in(user, row)
-            return redirect(absolute_url('/'))
+            return redirect('/')
         else:
             error = 'Invalid username or password'
 
@@ -233,5 +230,5 @@ def order():
     return process_order(params)
 
 if __name__ == '__main__':
-    app.run(host=settings.url_root, port=9233) #'0.0.0.0', port=9233)
+    app.run(host='0.0.0.0', port=9233)
 

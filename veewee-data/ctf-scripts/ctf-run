@@ -28,7 +28,16 @@ fi
 LEVEL="${1}"
 
 if sudo ctf-check-unlocked "${LEVEL}"; then
-  sudo "/var/ctf/levels/${LEVEL}/ctf-run.sh"
+  # Level 2 is a special case because its exploit allows compromising all files
+  # in the levels unless it is running as a user with limited permissions.
+  #
+  # The CTF_RUN_2_USER string will be replaced with the real value during
+  # provisioning.
+  #if [ "${LEVEL}" -eq "2" ]; then
+  #  sudo -u CTF_RUN_2_USER bash -c "/var/ctf/levels/${LEVEL}/ctf-run.sh"
+  #else
+    sudo "/var/ctf/levels/${LEVEL}/ctf-run.sh"
+  #fi
 else
   echo "Level ${LEVEL} is not yet unlocked."
   exit 1
