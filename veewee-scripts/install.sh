@@ -18,8 +18,8 @@ fi
 # Get the dependencies sorted out.
 # --------------------------------------------------------------------------
 
-brew install homebrew/dupes/apple-gcc42
-brew install gpg
+brew install --overwrite homebrew/dupes/apple-gcc42
+brew install --overwrite gpg
 
 # --------------------------------------------------------------------------
 # Install Ruby Version Manager (RVM).
