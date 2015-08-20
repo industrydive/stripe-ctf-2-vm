@@ -33,11 +33,11 @@ if sudo ctf-check-unlocked "${LEVEL}"; then
   #
   # The CTF_RUN_2_USER string will be replaced with the real value during
   # provisioning.
-  #if [ "${LEVEL}" -eq "2" ]; then
-  #  sudo -u CTF_RUN_2_USER bash -c "/var/ctf/levels/${LEVEL}/ctf-run.sh"
-  #else
+  if [ "${LEVEL}" -eq "2" ]; then
+    sudo -u CTF_RUN_2_USER bash -c "/var/ctf/levels/${LEVEL}/ctf-run.sh"
+  else
     sudo "/var/ctf/levels/${LEVEL}/ctf-run.sh"
-  #fi
+  fi
 else
   echo "Level ${LEVEL} is not yet unlocked."
   exit 1

@@ -46,6 +46,10 @@ VEEWEE_DIR="/${DIR}/../veewee"
 # Download Veewee if needed.
 if [[ ! -d "${VEEWEE_DIR}" ]]; then
   git clone https://github.com/jedi4ever/veewee.git "${VEEWEE_DIR}"
+else
+  cd "${VEEWEE_DIR}"
+  git fetch origin
+  git reset --hard origin/master
 fi
 
 # Run the setup.

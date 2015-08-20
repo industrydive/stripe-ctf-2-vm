@@ -28,7 +28,7 @@ Veewee::Session.declare({
   :ssh_key => "",
   :ssh_host_port => "WILL BE REPLACED",
   :ssh_guest_port => "22",
-  :sudo_cmd => "echo '%p'|sudo -S bash '%f'",
+  :sudo_cmd => "echo '%p'|sudo -H -S bash '%f'",
   :shutdown_cmd => "shutdown -P now",
   :postinstall_files => [
     "provision.sh",

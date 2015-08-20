@@ -79,7 +79,7 @@ sed -i "" \
 bundle exec veewee vbox build "${DEF_NAME}" \
   --nogui \
   --auto \
-  --workdir=/Users/reason/Code/stripe-ctf-2-vm/veewee #--skip-to-postinstall
+  --workdir="${PROJECT_DIR}/veewee" #--skip-to-postinstall
 
 # ---------------------------------------------------------------------------
 # Add networking for the hostonly network with defined IP.

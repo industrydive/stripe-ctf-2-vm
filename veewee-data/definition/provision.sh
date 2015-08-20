@@ -68,7 +68,9 @@ apt-get install -y \
   nmap \
   python-dev \
   sqlite3 \
+  libffi-dev \
   libsqlite3-dev \
+  libssl-dev \
   unzip \
   uuid \
   zip
@@ -150,13 +152,18 @@ echo "Installing Python and Python tools..."
 echo "---------------------------------------------------------------"
 
 apt-get -y install python-setuptools python-pip
+
 pip install --upgrade pip
 pip install --upgrade virtualenv
 pip install --upgrade setuptools
+
 pip install \
   flask \
   flup \
+  ndg-httpsclient \
   py-bcrypt \
+  pyasn1 \
+  pyopenssl \
   requests
 
 # --------------------------------------------------------------------------
@@ -245,6 +252,12 @@ ${CTF_USER} ALL=(ALL) NOPASSWD: /var/ctf/levels/${LEVEL}/ctf-halt.sh
 EOF
 done
 
+# Level 2 is a special case because it is being run by another user and another
+# syntax.
+cat >> "${SUDOERS_FILE}" <<EOF
+ctf ALL=(ALL) NOPASSWD: /bin/bash -c /var/ctf/levels/2/ctf-run.sh
+EOF
+
 # Stop the user from reading this file since it has passwords in it.
 chmod 600 "${SUDOERS_FILE}"
 
@@ -298,6 +311,9 @@ chmod -R o-rwx "${CTF_DIR}"
 
 # Level 2 needs to be owned by a different user to keep it safe.
 chown -R "${CTF_RUN_2_USER}:${CTF_RUN_2_USER}" "${CTF_DIR}/levels/2"
+
+# Need this to let the run user see the thing it is running.
+chmod a+x "${CTF_DIR}" "${CTF_DIR}/levels"
 
 # --------------------------------------------------------------------------
 # Clean up things we don't want the ctf user to be able to see.

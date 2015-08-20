@@ -34,3 +34,8 @@ bundle exec veewee vbox build "${DEF_NAME}" \
 
 Uncomment `--skip-to-postinstall` in order to rapidly rerun the provisioning
 process without going through the slow initial setup.
+
+## `rm /EMPTY`
+
+If developing on the VM without exporting it you will want to run `rm /EMPTY`
+before starting to ensure that it doesn't fill up.
