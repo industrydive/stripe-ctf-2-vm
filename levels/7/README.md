@@ -21,7 +21,8 @@ placed in the request body.
 
 You can use `client.py` to talk to the API, specifying an appropriate API
 endpoint, user id, and secret key. The client requires the `requests` module,
-which can be installed from pip with `pip install requests`.
+which can be installed from pip with `pip install requests`. This is already
+installed in the VM.
 
 # To Run
 

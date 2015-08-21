@@ -77,6 +77,7 @@ sed -i "" \
 # The commented --skip-to-postinstall is very useful when testing, as the full
 # build takes forever.
 bundle exec veewee vbox build "${DEF_NAME}" \
+  --force \
   --nogui \
   --auto \
   --workdir="${PROJECT_DIR}/veewee" #--skip-to-postinstall
