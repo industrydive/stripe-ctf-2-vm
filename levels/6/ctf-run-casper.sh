@@ -12,6 +12,6 @@ set -o nounset
 DIR="$( cd "$( dirname "$0" )" && pwd)"
 
 while true; do
-  casperjs "${DIR}/browser.coffee" http://localhost:4567
+  casperjs "${DIR}/browser.coffee" http://localhost:4569
   sleep 30
 done

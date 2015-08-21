@@ -59,8 +59,8 @@ casper.then ->
             'Why is everyone trying to exploit Streamer?', 'Streamer is *soo* secure',
             'Welcome!', 'Glad to have you here!', "I know what you're doing right now. You are reading this message."]
 
-  # Post infrequently
-  if Math.random() < 0.05
+  # Post half the time.
+  if Math.random() < 0.5
     console.log "Decided to post"
     title = titles[Math.floor(Math.random() * titles.length)]
     body = bodies[Math.floor(Math.random() * bodies.length)]

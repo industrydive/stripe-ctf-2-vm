@@ -27,7 +27,7 @@
       };
     </script>
 
-    <form id='new_post' name='new_post' action='<%= absolute_url("/posts") %>'
+    <form id='new_post' name='new_post' action='/posts'
           method='POST'>
       <%= csrf_tag %>
       <fieldset>
@@ -61,7 +61,7 @@
             body: $("#content").val(),
             <%= csrf_field %>: "<%= csrf_token %>"
           };
-          $.post('<%= absolute_url("/ajax/posts") %>',
+          $.post('/ajax/posts',
                  new_post_data,
                  function(data) {
             var status_text = $.parseJSON(data);
@@ -85,7 +85,7 @@
           <td>
             <% if @username == user[:username] %>
               <em>
-                <a href='<%= absolute_url("/user_info") %>' target='_blank'>
+                <a href='/user_info' target='_blank'>
                   <%=h user[:username] %> (me)i
                 </a>
               </em>

@@ -7,12 +7,12 @@
     <p>
       Sign into your Streamer account, and instantly start sharing updates
       with your friends. If you don't have an account yet,
-      <a href='<%= absolute_url ("/register") %>'>create one now</a>!
+      <a href='/register'>create one now</a>!
     </p>
 
     <br />
 
-    <form class='form-inline' action='<%= absolute_url("/login") %>'
+    <form class='form-inline' action='/login'
           method='post'>
       <%= csrf_tag %>
       <input class='input-medium' name='username' type='text'
