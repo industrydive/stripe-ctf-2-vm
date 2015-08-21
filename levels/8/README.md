@@ -40,7 +40,8 @@ inside is helping you &mdash; there's an [sshd][1] running on the Level 2 server
 as well).
 
 NB: During the actual Stripe CTF, the Level 8 server could access all high TCP
-ports on the Level 2 server, and the Level 2 server was running an SSHD.
+ports on the Level 2 server, and the Level 2 server was running an SSHD. This is
+also the case in this VM where both tests are on the same machine.
 
 To maximize adoption, usability is also a goal of PasswordDB. Hence a launcher
 script, `password_db_launcher`, has been created for the express purpose of
@@ -50,22 +51,8 @@ automatically spins up 4 chunk servers and a primary server.
 # To Run
 
 * Run `ctf-run 8` to start the server on port 4000.
+* Run `ctf-run 2` to start the level 2 server on port 7000.
 * Go to [http://192.168.57.2:4000](http://192.168.57.2:4000) in your browser.
-* Run `ctf-halt 8` to stop the server.
-
-
-- Run `password_db_launcher`. For example:
-
-    ./password_db_launcher 123456789012 127.0.0.1:3000
-
-  will start a PasswordDB instance running on 127.0.0.1:3000 and with
-  the Flag set to 123456789012.
-
-- Make sure you're using Twisted 11.1.0
-
-- Connect using curl:
-
-    curl 127.0.0.1:3000 -d '{"password": 123456789012, "webhooks": []}'
-
+* Run `ctf-halt 8;ctf-halt 2` to stop the server.
 
 [1]: http://linux.about.com/od/commands/l/blcmdl8_sshd.htm

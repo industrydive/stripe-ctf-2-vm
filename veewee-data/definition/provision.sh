@@ -217,11 +217,19 @@ EOF
 # Create the passwords.
 # --------------------------------------------------------------------------
 
-PASSWORDS=( "" "" "" "" "" "" "" "" "" )
-for LEVEL in {1..9}; do
+PASSWORDS=( "" "" "" "" "" "" "" "" "" "" )
+for LEVEL in {1..8}; do
   # Useful for testing
   # ${PASSWORDS[${LEVEL}]}="test-${LEVEL}"
   PASSWORDS[${LEVEL}]=`uuid -v4`
+done
+
+# The last password has to be a 12-digit number to keep consistency with the
+# original CTF setup.
+PASSWORDS[9]=""
+for DIGIT in {0..11}; do
+  RAND=`shuf -i 0-9 -n 1`
+  PASSWORDS[9]="${PASSWORDS[9]}${RAND}"
 done
 
 # --------------------------------------------------------------------------
