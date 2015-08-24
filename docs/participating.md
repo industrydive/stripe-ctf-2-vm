@@ -75,7 +75,8 @@ ctf-halt <level>
 
 If you log into the VM you'll find a copy of the level code in your home
 directory. Some of the levels suggest that you might want to run the code
-locally to get a better idea as to how to break it. You can do this in the VM.
+locally to get a better idea as to how to break it. You can do this in the VM,
+with a little work.
 
 ## Rules of Engagement
 
@@ -84,11 +85,23 @@ locally to get a better idea as to how to break it. You can do this in the VM.
 There are all sorts of ways to attack code: bad parameters, XSS, SQL injection,
 and more. Assume all of these are on the table.
 
+### Collaborate
+
+This is a learning exercise, and the best way to approach it is to work
+together, especially in the later levels where the puzzle is much more
+challenging.
+
 ### No changing the code! That only works for Captain Kirk.
 
 All of the challenge levels can be broken through the web interface, with the
 code running as it is presently written. Inspecting the code will lead you to
 how that can be done.
+
+### Victory is Obtaining the Secret From Level 8
+
+You start with level 0, and work your way to level 8. Victory is obtained by
+finding the key stored in level 8. You can verify that key with the contest
+administrators.
 
 [1]: https://www.virtualbox.org/wiki/Downloads
 [2]: ../levels
