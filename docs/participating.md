@@ -8,20 +8,48 @@ current puzzle.
 
 ## Obtain the VM
 
-You should have been provided with a zipped archive containing the VM files by
-the contest organizer and the credentials necessary to log in and start, stop,
-or unlock the servers for each level. You have only very limited sudo access and
-no access to other accounts. That would be too easy.
+You should have been provided with the following by the contest organizer:
 
-The user you will use to log in is probably `ctf`. Check with the organizer.
+* A link to a tar archive containing the VM files.
+* Credentials to log in to the VM via SSH.
 
-## Install Requirements
+Note that the user provided has only very limited sudo access and no access to
+other accounts. Much of the VM is off-limits.
 
-The only requirement is to install the latest version of [Virtualbox][1].
+## Installation Instructions
 
-Then unzip the archive containing the VM and open the `.ovf` file to import
-the VM into Virtualbox. Once imported, start the VM. It will run at the
-IP address 192.168.57.2.
+* Install the latest version of [Virtualbox][1].
+* Unpack the archive containing the VM.
+* From among the unpacked files, open the `.ovf` file to import the VM into
+Virtualbox.
+* Next set up a network adaptor for the server. Run the the following commands
+in either OS X or Linux:
+
+```
+cat > /tmp/setup-ctf-adaptor.sh <<EOF
+#!/bin/bash
+DEF_NAME="stripe-ctf-2-ubuntu-14.04"
+GATEWAY="192.168.57.1"
+
+vboxmanage controlvm "\${DEF_NAME}" poweroff soft
+
+INTERFACE=\`vboxmanage hostonlyif create\`
+ARR=()
+IFS="'" read -a ARR <<< "\${INTERFACE}"
+INTERFACE="\${ARR[1]}"
+
+vboxmanage hostonlyif ipconfig "\${INTERFACE}" --ip "\${GATEWAY}"
+vboxmanage modifyvm "\${DEF_NAME}" --hostonlyadapter2 "\${INTERFACE}"
+vboxmanage modifyvm "\${DEF_NAME}" --nic2 hostonly
+vboxmanage startvm "\${DEF_NAME}" --type headless
+EOF
+chmod a+x /tmp/setup-ctf-adaptor.sh
+/tmp/setup-ctf-adaptor.sh
+```
+
+These commands will add the necessary network adaptor and start the server
+running at the IP address 192.168.57.2. You can use the Virtualbox UI to start
+and stop the server thereafter.
 
 ## Getting Started
 

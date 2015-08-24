@@ -86,10 +86,14 @@ bundle exec veewee vbox build "${DEF_NAME}" \
 # Add networking for the hostonly network with defined IP.
 # ---------------------------------------------------------------------------
 
-# Set up networking.
+# Set up networking by adding a hostonly network adaptor for ${IP_ADDRESS}
+# and then adding a suitable network configuration inside the VM.
 #
-# By default we don't get the networking we want out of this; it'll be set up
-# for NAT only, and we want it on a hostonly network with a specific IP address.
+# IMPORTANT NOTE: when the box is exported, the network adaptor setting goes
+# with it - but only the setting. When imported to a new host the actual network
+# adaptor is not created, only the setting to use one is imported.
+#
+# So creating the adaptor here is really only useful for development purposes.
 #
 # Has this already been set up for this VM? e.g. if we're testing.
 if vboxmanage showvminfo "${DEF_NAME}" | grep -q "Attachment: Host-only Interface"; then
@@ -116,7 +120,8 @@ else
   sleep 5
 fi
 
-# Now log in and get the interface set up inside the VM.
+# Now log in and get the interface set up inside the VM, assuming it wasn't
+# there before.
 ssh \
   "${ADMIN_USER}@localhost" \
   -o StrictHostKeyChecking=no \
