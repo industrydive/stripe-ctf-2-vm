@@ -34,6 +34,7 @@ if sudo ctf-check-pass ${LEVEL}; then
   # rules being strict, but the ctf-check-pass should prevent that from being
   # an issue.
   sudo ctf-unlocker "${LEVEL}" "${PASSWORD}"
+  echo "Level ${LEVEL} unlocked"
 else
   exit 1
 fi
