@@ -1,28 +1,29 @@
 # Participating in the CTF Contest
 
-The second Strip CTF contest is an exercise for web developers at all levels of
-skill designed to teach some of the basics of web security. There are nine
-puzzles, each with its own set of code to inspect, the first being the easiest
-and the last the hardest. To progress to the next puzzle you must solve the
-current puzzle.
+Stripe's second CTF contest was designed to teach some of the basics of web security to web developers of skill levels. We have revived the contest in a convenient VM.
+
+There are nine puzzles of increasing difficultly. Your mission is simple: solve the current puzzle in order to unlock the next puzzle. Repeat until you pwn level 8.
 
 ## Obtain the VM
 
-You should have been provided with the following by the contest organizer:
+The contest organizers must provide you with:
 
 * A link to a tar archive containing the VM files.
 * Credentials to log in to the VM via SSH.
 
-Note that the user provided has only very limited sudo access and no access to
-other accounts. Much of the VM is off-limits.
+Note that much of the VM is off-limits. Your user credentials has very limited sudo access and no access to other accounts.
 
-## Installation Instructions
+## Install the VM
 
 * Install the latest version of [Virtualbox][1].
-* Unpack the archive containing the VM.
-* From among the unpacked files, open the `.ovf` file to import the VM into
-Virtualbox.
-* Next set up a network adaptor for the server. Run the the following commands
+* Unpack the archive containing the VM: `tar -xvzf ctf-vm.tar.gz`
+* Locate the `.ovf` file amongst the unpacked files
+* [Import][4] the `.ovf` file into Virtualbox to make a VM
+
+
+## Setup a Host-Only Network Adapter
+
+Next set up a network adaptor for the server. Run the the following commands
 in either OS X or Linux:
 
 ```
@@ -51,60 +52,34 @@ These commands will add the necessary network adaptor and start the server
 running at the IP address 192.168.57.2. You can use the Virtualbox UI to start
 and stop the server thereafter.
 
-## Getting Started
+## Log In
 
-You will need to log in to the VM in order to run server processes and unlock
+Once you start the VM, you will need to log in in order to run server processes and unlock
 puzzle levels. E.g. for user `ctf`:
 
 ```
 ssh ctf@192.168.57.2
 ```
+In your home directory, you find that each puzzle has a corresponding subdirectory in ./levels and each one has a README.md file.
 
-You will also need to inspect the puzzle code and `README.md` documents as you
-progress in the contest. These can be found in the [levels directory][2], and
-the first puzzle is ready and waiting under [levels/0][3].
+You will only be able to execute the first puzzle, [level 0][3]. You can find the source files and README.md on the VM by doing `cd levels/0`.
 
-Lastly, you will need a web browser open to load pages from the VM server
-processes. Get started by looking at the [level 0 README.md][3] file for
-context, and start the service running with the following command while logged
-in to the VM:
+## Play the Game...
 
-```
-ctf-run 0
-```
+Heres the basic worflow to solving each puzzle...
 
-## Unlocking the Next Level
-
-When you have obtained the password to the next level, you can unlock that level
-by logging into the VM to use the `ctf-unlock` script.
-
-```
-ctf-unlock <level> <password>
-```
-
-You can only run the services for a level once it is unlocked in this was, and
-unlocking requires the password.
-
-## Running and Halting a Level
-
-To run the server for a given level:
-
-```
-ctf-run <level>
-```
-
-To halt it:
-
-```
-ctf-halt <level>
-```
-
-## Investigating the Level Code
-
-If you log into the VM you'll find a copy of the level code in your home
-directory. Some of the levels suggest that you might want to run the code
-locally to get a better idea as to how to break it. You can do this in the VM,
+1. `cd` to the puzzle directory. 
+2. Run the puzzle by `ctf-run <level>`. So for puzzle 0, you would execute `ctf-run 0`.
+3. Consult the README.md file for the no active web app's url and browse there.
+4. Leverage the web app and its source code (which can be found either in the levels subdirectories on the VM or [in the repository][2]).
+5. Solve the puzzle. Should be simple, right? Some of the levels suggest that you might want to run the code locally to get a better idea as to how to break it. You can do this in the VM,
 with a little work.
+6. The loot for each level is the password for the next level. If you have that in hand, you've beaten the puzzle.
+7. Unlock the next level by `ctf-unlock <level> <password>`. So for puzzle 1, you would execute something like `ctf-unlock 1 totally-fake-password`.
+8. Lather, rinse, repeat.
+
+N.B. That some levels require access to an earlier level. You will need to `ctf-run` those if you have halted them.
+
 
 ## Rules of Engagement
 
@@ -131,6 +106,38 @@ You start with level 0, and work your way to level 8. Victory is obtained by
 finding the key stored in level 8. You can verify that key with the contest
 administrators.
 
+
+## CTF Script Reference
+### Unlock a Level
+
+To unlock a given level:
+
+```
+ctf-unlock <level> <password>
+```
+You can only unlock the next level if you have looted its password out the current puzzle.
+
+### Run a Level
+
+To run the server for a given level:
+
+```
+ctf-run <level>
+```
+
+You can only run the services for a level once it is unlocked in this was, and
+unlocking requires the password.
+
+### Halt a Level
+
+To halt a given level:
+
+```
+ctf-halt <level>
+```
+
+
 [1]: https://www.virtualbox.org/wiki/Downloads
 [2]: ../levels
 [3]: ../levels/0
+[4]: http://docs.oracle.com/cd/E26217_01/E26796/html/qs-import-vm.html
