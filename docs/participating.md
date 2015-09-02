@@ -20,7 +20,6 @@ Note that much of the VM is off-limits. Your user credentials has very limited s
 * Locate the `.ovf` file amongst the unpacked files
 * [Import][4] the `.ovf` file into Virtualbox to make a VM
 
-
 ## Setup a Host-Only Network Adapter
 
 Next set up a network adaptor for the server. Run the the following commands
