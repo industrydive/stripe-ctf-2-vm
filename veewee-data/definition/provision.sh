@@ -347,6 +347,19 @@ chown -R "${CTF_RUN_2_USER}:${CTF_RUN_2_USER}" "${CTF_DIR}/levels/2"
 chmod a+x "${CTF_DIR}" "${CTF_DIR}/levels"
 
 # --------------------------------------------------------------------------
+# Turn off access to recovery mode.
+# --------------------------------------------------------------------------
+
+# Recovery mode allows people to drop into a root console.
+
+echo "---------------------------------------------------------------"
+echo "Disabling recovery mode..."
+echo "---------------------------------------------------------------"
+
+sed -i "s,#GRUB_DISABLE_RECOVERY,GRUB_DISABLE_RECOVERY,g" /etc/default/grub
+update-grub
+
+# --------------------------------------------------------------------------
 # Clean up files we don't want the ${CTF_USER} to see.
 # --------------------------------------------------------------------------
 
