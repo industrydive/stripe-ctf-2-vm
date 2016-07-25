@@ -25,7 +25,7 @@ machine, but the effects are the same.
 
 # To Run
 
-* Run `ctf-run 4` to start the server on port 4568.
+* Run `ctf-run 5` to start the server on port 4568.
 * Run `ctf-run 2` to start the level 2 server on port 7000.
 * Go to [http://192.168.57.2:4568](http://192.168.57.2:4568) in your browser.
 * Run `ctf-halt 4; ctf-halt 2` to stop the servers.
