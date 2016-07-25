@@ -120,7 +120,7 @@ chmod 666 /phantomjsdriver.log
 # Install CasperJS and PhantomJS via NPM. CasperJS pulls in PhantomJS as a
 # dependency, but doesn't seem to correctly sort out everything needed with
 # paths, etc. So install it explicitly as well.
-npm install -g --loglevel=info casperjs phantomjs
+npm install -g --loglevel=info casperjs phantomjs@1.9.19
 
 # --------------------------------------------------------------------------
 # Install necessary PHP packages.
