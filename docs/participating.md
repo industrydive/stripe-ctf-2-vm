@@ -70,6 +70,10 @@ and unlock puzzle levels. E.g. for user `ctf`:
 
 ```
 ssh ctf@192.168.57.2
+
+# If your Bash profile forces key authentication, you might need to do this
+# instead:
+ssh -o PubkeyAuthentication=no ctf@192.168.57.2
 ```
 
 In your home directory, you find that each puzzle has a corresponding
