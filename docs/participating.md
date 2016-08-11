@@ -45,6 +45,22 @@ GATEWAY="192.168.57.1"
 
 VBoxManage controlvm "\${DEF_NAME}" poweroff soft
 
+if ifconfig | grep --quiet "\${GATEWAY}"; then
+  cat <<TOF
+One or more interfaces for gateway \${GATEWAY} already exist. List these interfaces with:
+
+ifconfig
+
+Then run the following command to delete each interface, where [name] is of the form "vboxnetN":
+
+vboxmanage hostonlyif remove [name]
+
+Then rerun this script to start the VM.
+
+TOF
+  exit 1
+fi
+
 INTERFACE=\`VBoxManage hostonlyif create\`
 ARR=()
 IFS="'" read -a ARR <<< "\${INTERFACE}"
