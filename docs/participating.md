@@ -26,7 +26,7 @@ limited sudo access and no access to other accounts.
   * Unpack the archive containing the VM:
 
 ```
-tar -xvzf ctf-vm.tar.gz`
+tar -xvzf ctf-vm.tar.gz
 ```
 
   * Locate the `.ovf` file amongst the unpacked files
