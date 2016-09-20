@@ -103,21 +103,22 @@ Initially will only be able to run the server for the first puzzle,
 
 Use the following workflow to work with a given level.
 
-  1. `cd` to the level directory. E.g. `cd ~/levels/0`.
-  2. Run the server for this level with the command `ctf-run <level>`. So for
-level 0, enter `ctf-run 0`.
-  3. Consult the level `README.md` file, e.g. `~/levels/0/README.md`, to find
+  1. Run the server for this level with the command `ctf-run <level>`. So for
+level 0, enter `ctf-run 0`. Don't execute this command in the copy of the level
+directory at `~/levels/0`. You want to run the `/usr/local/bin/ctf-run` script,
+not the `~/levels/0/ctf-run.sh` script.
+  2. Consult the level `README.md` file, e.g. `~/levels/0/README.md`, to find
 the URL of the server. Load it and look over its web pages.
-  4. View the `README.md` hints, the web application, and the source code in the
+  3. View the `README.md` hints, the web application, and the source code in the
 level directory or [the repository][2].
-  5. Solve the puzzle! Some of the levels suggest that you might want to run the
+  4. Solve the puzzle! Some of the levels suggest that you might want to run the
 code locally to better understand how to break it. This can be accomplished in
 the VM, with a little work.
-  6. Solving a level involves uncovering the password for the next level.
-  7. Unlock the next level with the command `ctf-unlock <level> <password>`. So
+  5. Solving a level involves uncovering the password for the next level.
+  6. Unlock the next level with the command `ctf-unlock <level> <password>`. So
 for level 1, you would enter something along the lines of
 `ctf-unlock 1 password-found-in-level-0`.
-  8. Shut down the completed level using the command `ctf-halt <level>`. So for
+  7. Shut down the completed level using the command `ctf-halt <level>`. So for
 level 0, enter `ctf-halt 0`.
 
 Note that some levels require access to an earlier level in order to exploit a
