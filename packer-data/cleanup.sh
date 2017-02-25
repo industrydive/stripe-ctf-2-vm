@@ -1,7 +1,6 @@
 #!/bin/bash
 #
-# Provisioning clean up, copied from Veewee template. This has to run at the end
-# of the provisioning process.
+# Provisioning clean up. This has to run at the end of the provisioning process.
 #
 
 echo "filling disk with zeroes"

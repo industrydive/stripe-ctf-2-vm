@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Provisioning script for the Strip CTF VM.
+# Provisioning script for the Stripe CTF VM.
 #
 # This will run as root in the VM.
 #
@@ -16,8 +16,10 @@ echo "---------------------------------------------------------------"
 echo "Loading environment variables..."
 echo "---------------------------------------------------------------"
 
-# This script will have been uploaded during the before_postinstall Veewee step.
-source /tmp/environment.sh
+TMP_DIR="/tmp/packer"
+
+# This script will have been uploaded to the VM beforehand.
+source "${TMP_DIR}/environment.sh"
 
 CTF_DIR="/var/ctf"
 
@@ -37,7 +39,7 @@ if [ ! -d "${SSH_DIR}" ]; then
   chown "${ADMIN_USER}:${ADMIN_USER}" "${SSH_DIR}"
 fi
 
-cat /tmp/id_rsa.pub >> "${SSH_DIR}/authorized_keys"
+cat "${TMP_DIR}/id_rsa.pub" >> "${SSH_DIR}/authorized_keys"
 chmod 600 "${SSH_DIR}/authorized_keys"
 chown "${ADMIN_USER}:${ADMIN_USER}" "${SSH_DIR}/authorized_keys"
 
@@ -211,7 +213,7 @@ echo "---------------------------------------------------------------"
 echo "Set up ctf-* binaries and PATH..."
 echo "---------------------------------------------------------------"
 
-cp /tmp/ctf-* /usr/local/bin
+cp "${TMP_DIR}/ctf-scripts/ctf-"* /usr/local/bin
 chown root:root /usr/local/bin/ctf-*
 chmod a+x /usr/local/bin/ctf-*
 
@@ -300,7 +302,7 @@ LEVELS_DIR="${CTF_DIR}/levels"
 # Unzip the code.
 rm -Rf "${CTF_DIR}"
 mkdir -p "${CTF_DIR}"
-unzip -o -q /tmp/levels.zip -d "${CTF_DIR}"
+unzip -o -q "${TMP_DIR}/levels.zip" -d "${CTF_DIR}"
 
 # Give the ${CTF_USER} a copy of the levels prior to the setup. Since some of
 # the later levels recommend running the thing locally, seems sensible.
@@ -367,6 +369,4 @@ echo "---------------------------------------------------------------"
 echo "Cleaning up /tmp files..."
 echo "---------------------------------------------------------------"
 
-rm -f /tmp/environment.sh
-rm -f /tmp/levels.zip
-rm -f /tmp/ctf-*
+rm -Rf "${TMP_DIR}"

@@ -1,6 +1,6 @@
 # Creating the Virtualbox VM
 
-The Ubuntu 14.04 Virtualbox VM for the CTF contest is created via [Veewee][3].
+The Ubuntu 14.04 Virtualbox VM for the CTF contest is created via [Packer][2].
 The scripts used in the creation process were developed for OS X, though should
 run on other distributions - or at least only require minor changes. Anyone can
 use the VM once it has been created, provided that they have Virtualbox
@@ -9,16 +9,14 @@ installed.
 ## Installation Requirements
 
 * Install the latest version of [Virtualbox][1].
-* Install [Git][5].
-* Install [Homebrew][2] if using OS X.
+* Install [Git][3].
 
 ## Run the Installation Script
 
-Run the installation script to install the needed tools, including the
-[Ruby Version Manager (RVM)][4] and Veewee.
+Run the installation script to install a recent version of Packer.
 
 ```
-veewee-scripts/install.sh
+packer-scripts/install.sh
 ```
 
 ## Configure the Creation Process
@@ -39,7 +37,7 @@ UI will be visible during the process. It can be left to run on its own until
 it completes:
 
 ```
-veewee-scripts/create-ctf-vm.sh
+packer-scripts/create-ctf-vm.sh
 ```
 
 ## Export the VM
@@ -47,10 +45,10 @@ veewee-scripts/create-ctf-vm.sh
 Lastly run the export script:
 
 ```
-veewee-scripts/export-ctf-vm.sh
+packer-scripts/export-ctf-vm.sh
 ```
 
-The packaged VM zip file will be placed in the `dist` folder.
+The packaged VM archive file will be placed in the `dist` folder.
 
 ## Distributing the VM
 
@@ -58,15 +56,13 @@ To distribute the VM, upload it to a file sharing service such as Box, or to an
 accessible location on AWS S3. Send an email to the contestants to provide each
 of them with:
 
-  * Links to the [participant instructions][6] and [CTF code][7] in this
+  * Links to the [participant instructions][4] and [CTF code][5] in this
 repository.
   * A link or instructions to download the VM.
   * The CTF user name and password.
 
 [1]: https://www.virtualbox.org/wiki/Downloads
-[2]: http://brew.sh/
-[3]: https://github.com/jedi4ever/veewee
-[4]: https://rvm.io/
-[5]: https://git-scm.com/
-[6]: ./participating.md
-[7]: ../levels
+[2]: https://www.packer.io/
+[3]: https://git-scm.com/
+[4]: ./participating.md
+[5]: ../levels

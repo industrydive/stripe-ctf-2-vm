@@ -33,5 +33,3 @@ CTF_RUN_2_USER="ctf-2"
 # for that change when creating the adaptor for the VM instance.
 IP_ADDRESS="192.168.57.2"
 GATEWAY="192.168.57.1"
-
-SSH_HOST_PORT="7222"

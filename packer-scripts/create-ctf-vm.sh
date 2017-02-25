@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Use Veewee to create the CTF VM.
+# Create the CTF VM.
 #
 # This script was created for use with OS X, but should hopefully work in other
 # distributions.
@@ -14,39 +14,45 @@ set -o errexit
 DIR="$( cd "$( dirname "$0" )" && pwd)"
 PROJECT_DIR="${DIR}/.."
 
-# If the user installed veewee then directly ran this script, they won't have
-# loaded the necessary profile script. So make sure that has happened.
-if [ -f "${HOME}/.bash_profile" ]; then
-  source "${HOME}/.bash_profile"
-fi
-
 # Obtain the necessary configuration variables.
 source "${PROJECT_DIR}/config/environment.sh"
 
 DEF_NAME="stripe-ctf-2-ubuntu-14.04"
-DEF_PATH="${PROJECT_DIR}/veewee/definitions/${DEF_NAME}"
-PRIVATE_KEY_PATH="${DEF_PATH}/id_rsa"
+PACKER_DIR="${PROJECT_DIR}/packer"
+PRIVATE_KEY_PATH="${PACKER_DIR}/id_rsa"
+SSH_HOST_PORT="8222"
 
 # ---------------------------------------------------------------------------
-# Grab a template and create a definition, forcing overwrite.
+# Clean up known_hosts.
 # ---------------------------------------------------------------------------
 
-cd "${PROJECT_DIR}/veewee"
-mkdir -p "${PROJECT_DIR}/veewee/definitions"
-rm -Rf "${DEF_PATH}"
-cp -r "${PROJECT_DIR}/veewee-data/definition" "${DEF_PATH}"
+# When building multiple VMs we're going to have local known_hosts entries that
+# will cause issues. Get rid of those.
+KNOWN_HOSTS="${HOME}/.ssh/known_hosts"
+
+if [[ -f "${KNOWN_HOSTS}" ]]; then
+  if [[ "${OSTYPE}" =~ ^darwin[0-9]+$ ]]; then
+    sed -i "" "/${IP_ADDRESS}/d" "${KNOWN_HOSTS}"
+  else
+    sed -i "/${IP_ADDRESS}/d" "${KNOWN_HOSTS}"
+  fi
+fi
+
+# ---------------------------------------------------------------------------
+# Assemble materials in the packer directory.
+# ---------------------------------------------------------------------------
+
+rm -Rf "${PACKER_DIR}"
+cp -rf "${PROJECT_DIR}/packer-data" "${PACKER_DIR}"
 
 # Add the zipped levels for upload to the VM, and arrange it so that only the
-# "levels" part of the path is included in the zip file.
+# "apps" part of the path is included in the zip file.
 cd "${PROJECT_DIR}"
-zip -q -r "${DEF_PATH}/levels.zip" "levels"
+zip -q -r "${PACKER_DIR}/levels.zip" "levels"
 cd -
 
-# Add the configuration.
-cp -f "${PROJECT_DIR}/config/environment.sh" "${DEF_PATH}"
-
-# Add the ctf-* scripts.
-cp -f "${PROJECT_DIR}/veewee-data/ctf-scripts/"* "${DEF_PATH}"
+# Copy in the configuration.
+cp -f "${PROJECT_DIR}/config/environment.sh" "${PACKER_DIR}"
 
 # Add a keypair.
 ssh-keygen -t rsa -N "" -b 4096 -C "${ADMIN_USER}" -f "${PRIVATE_KEY_PATH}"
@@ -56,35 +62,48 @@ ssh-keygen -t rsa -N "" -b 4096 -C "${ADMIN_USER}" -f "${PRIVATE_KEY_PATH}"
 # ---------------------------------------------------------------------------
 
 # Set the main login user.
-sed -i "" \
-  "s/:ssh_user.*/:ssh_user => '${ADMIN_USER}',/" \
-  "${DEF_PATH}/definition.rb"
-sed -i "" \
-  "s/:ssh_password.*/:ssh_password => '${ADMIN_USER_PASS}',/" \
-  "${DEF_PATH}/definition.rb"
-sed -i "" \
-  "s/:ssh_host_port.*/:ssh_host_port => '${SSH_HOST_PORT}',/" \
-  "${DEF_PATH}/definition.rb"
-sed -i "" \
-  "s/ADMIN_USER_PASS/${ADMIN_USER_PASS}/" \
-  "${DEF_PATH}/preseed.cfg"
-sed -i "" \
-  "s/ADMIN_USER/${ADMIN_USER}/" \
-  "${DEF_PATH}/preseed.cfg"
+
+if [[ "${OSTYPE}" =~ ^darwin[0-9]+$ ]]; then
+  sed -i "" \
+    "s/ADMIN_USER_PASS/${ADMIN_USER_PASS}/" \
+    "${PACKER_DIR}/template.json"
+  sed -i "" \
+    "s/ADMIN_USER/${ADMIN_USER}/" \
+    "${PACKER_DIR}/template.json"
+  sed -i "" \
+    "s/SSH_HOST_PORT/${SSH_HOST_PORT}/" \
+    "${PACKER_DIR}/template.json"
+  sed -i "" \
+    "s/ADMIN_USER_PASS/${ADMIN_USER_PASS}/" \
+    "${PACKER_DIR}/preseed.cfg"
+  sed -i "" \
+    "s/ADMIN_USER/${ADMIN_USER}/" \
+    "${PACKER_DIR}/preseed.cfg"
+else
+  sed -i \
+    "s/ADMIN_USER_PASS/${ADMIN_USER_PASS}/" \
+    "${PACKER_DIR}/template.json"
+  sed -i \
+    "s/ADMIN_USER/${ADMIN_USER}/" \
+    "${PACKER_DIR}/template.json"
+  sed -i \
+    "s/SSH_HOST_PORT/${SSH_HOST_PORT}/" \
+    "${PACKER_DIR}/template.json"
+  sed -i \
+    "s/ADMIN_USER_PASS/${ADMIN_USER_PASS}/" \
+    "${PACKER_DIR}/preseed.cfg"
+  sed -i \
+    "s/ADMIN_USER/${ADMIN_USER}/" \
+    "${PACKER_DIR}/preseed.cfg"
+fi
 
 # ---------------------------------------------------------------------------
 # Build the new Virtualbox VM.
 # ---------------------------------------------------------------------------
 
-# Build the box.
-#
-# The commented --skip-to-postinstall is very useful during development and
-# testing, as the full build takes a long time.
-bundle exec veewee vbox build "${DEF_NAME}" \
-  --force \
-  --nogui \
-  --auto \
-  --workdir="${PROJECT_DIR}/veewee" #--skip-to-postinstall
+packer build \
+  -force \
+  "${PACKER_DIR}/template.json"
 
 # ---------------------------------------------------------------------------
 # Add networking for the hostonly network with defined IP.
@@ -101,14 +120,13 @@ bundle exec veewee vbox build "${DEF_NAME}" \
 # purposes.
 #
 
+# At this point the VM is shutdown.
+
 # Has this already been set up for this VM? e.g. if we're testing.
 if VBoxManage showvminfo "${DEF_NAME}" | grep -q "Attachment: Host-only Interface"; then
   echo "Host-only adaptor already assigned for this VM."
 else
   echo "Assigning host-only adaptor for VM at ${IP_ADDRESS}, with gateway ${GATEWAY}..."
-
-  # Shutdown.
-  VBoxManage controlvm "${DEF_NAME}" poweroff soft
 
   INTERFACE=`VBoxManage hostonlyif create`
   ARR=()
@@ -120,14 +138,27 @@ else
   VBoxManage modifyvm "${DEF_NAME}" --hostonlyadapter2 "${INTERFACE}"
   VBoxManage modifyvm "${DEF_NAME}" --nic2 hostonly
 
-  # While we're here, get rid of an unwanted share.
-  VBoxManage sharedfolder remove "${DEF_NAME}" --name "veewee-validation"
-
   # Restart.
   VBoxManage startvm "${DEF_NAME}" --type headless
 
   sleep 5
 fi
+
+# Log in and delete /EMPTY, which is the file created to fill up the
+# disk. If it is allowed to remain, then the disk fills up very quickly and the
+# VM stops working.
+#
+# TODO: there is an earlier attempt to delete /EMPTY in cleanup.sh, but it does
+# not work. Why?
+ssh \
+  "${ADMIN_USER}@localhost" \
+  -o StrictHostKeyChecking=no \
+  -i "${PRIVATE_KEY_PATH}" \
+  -p "${SSH_HOST_PORT}" \
+  bash -c "'
+echo "Removing /EMPTY..."
+sudo rm -fv /EMPTY
+'"
 
 # Next log in and set up the network interface inside the VM, assuming it wasn't
 # there before.
@@ -140,8 +171,9 @@ ssh \
 # To match the hostonly adaptor that will be created for the VM.
 # The token IP_ADDRESS will be replaced.
 if ! sudo grep -q "${IP_ADDRESS}" /etc/network/interfaces; then
-cat > /tmp/interfaces <<EOF
+  echo "Setting up hostonly adaptor interface for ${IP_ADDRESS}..."
 
+  cat > /tmp/interfaces <<EOF
 # Hostonly adaptor.
 auto eth1
 iface eth1 inet static
@@ -149,22 +181,20 @@ iface eth1 inet static
   netmask 255.255.255.0
 EOF
 
-sudo -s bash -c \"cat /tmp/interfaces >> /etc/network/interfaces\"
-sudo ifconfig eth1 up
+  sudo -s bash -c \"cat /tmp/interfaces >> /etc/network/interfaces\"
+  sudo ifconfig eth1 up
+  echo "Hostonly adaptor interface for ${IP_ADDRESS} set up."
+else
+  echo "Hostonly adaptor interface for ${IP_ADDRESS} already set up."
 fi
 '"
 
-# Lastly log in and delete /EMPTY, which is the file created to fill up the
-# disk. If it is allowed to remain, then the disk fills up very quickly and the
-# VM stops working.
-#
-# TODO: there is an earlier attempt to delete /EMPTY in cleanup.sh, but it does
-# not work. Why?
-ssh \
-  "${ADMIN_USER}@localhost" \
-  -o StrictHostKeyChecking=no \
-  -i "${PRIVATE_KEY_PATH}" \
-  -p "${SSH_HOST_PORT}" \
-  bash -c "'
-sudo rm -fv /EMPTY
-'"
+# Wait 60 seconds. Shutting down too soon will lose this last change to the
+# network interfaces for reasons that are obscure but probably relate to disk
+# flushing behavior.
+echo "Waiting for 60 seconds before shutdown..."
+sleep 60
+
+# Shutdown.
+echo "Gracefully shutting down the VM..."
+VBoxManage controlvm "${DEF_NAME}" acpipowerbutton

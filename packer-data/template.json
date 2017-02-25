@@ -1,0 +1,59 @@
+{
+  "builders": [
+    {
+      "boot_command": [
+        "<esc><esc><enter><wait>",
+        "/install/vmlinuz noapic preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg ",
+        "debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
+        "hostname={{ .Name }} ",
+        "fb=false debconf/frontend=noninteractive ",
+        "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=us keyboard-configuration/variant=us console-setup/ask_detect=false ",
+        "initrd=/install/initrd.gz -- <enter>"
+      ],
+      "disk_size": 65536,
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+      "guest_os_type": "Ubuntu_64",
+      "format": "ovf",
+      "headless": true,
+      "http_directory": "packer",
+      "iso_url": "http://releases.ubuntu.com/14.04/ubuntu-14.04.5-server-amd64.iso",
+      "iso_checksum": "dd54dc8cfc2a655053d19813c2f9aa9f",
+      "iso_checksum_type": "md5",
+      "keep_registered": true,
+      "output_directory": "build",
+      "ssh_host_port_min": SSH_HOST_PORT,
+      "ssh_host_port_max": SSH_HOST_PORT,
+      "ssh_username": "ADMIN_USER",
+      "ssh_password": "ADMIN_USER_PASS",
+      "ssh_wait_timeout": "20m",
+      "shutdown_command": "sudo shutdown -P now",
+      "skip_export": true,
+      "type": "virtualbox-iso",
+      "vboxmanage": [
+        ["modifyvm", "{{.Name}}", "--cpus", "2"],
+        ["modifyvm", "{{.Name}}", "--memory", "2048"]
+      ],
+      "vboxmanage_post": [
+
+      ],
+      "virtualbox_version_file": ".vbox_version",
+      "vm_name": "stripe-ctf-2-ubuntu-14.04"
+    }
+  ],
+  "min_packer_version": "0.12.2",
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "packer",
+      "destination": "/tmp"
+    },
+    {
+      "type": "shell",
+      "execute_command": "echo 'ADMIN_USER_PASS' | sudo -S -H sh -c '{{ .Vars }} {{ .Path }}'",
+      "scripts": [
+        "packer/provision.sh",
+        "packer/cleanup.sh"
+      ]
+    }
+  ]
+}

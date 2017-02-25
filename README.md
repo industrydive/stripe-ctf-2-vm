@@ -1,7 +1,7 @@
 # Stripe Capture the Flag (CTF) 2 in a Virtualbox VM
 
 This repository provides the [2012 Stripe CTF 2.0 contest][1] in the form of a
-Virtualbox VM, generated with [Veewee][2], suitable for conducting group
+Virtualbox VM, generated with [Packer][2], suitable for conducting group
 exercises with a minimum of technical preparation.
 
 The Capture the Flag (CTF) contest is an exercise for developers at all levels
@@ -28,7 +28,7 @@ used and their relevance to current development work.
 * [Development Notes][5]
 
 [1]: https://github.com/stripe-ctf/stripe-ctf-2.0
-[2]: https://github.com/jedi4ever/veewee
+[2]: https://www.packer.io/
 [3]: ./docs/creating-the-vm.md
 [4]: ./docs/participating.md
 [5]: ./docs/development-notes.md
