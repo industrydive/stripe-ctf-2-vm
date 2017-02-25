@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.0
+
+  * Move to Packer.
+  * Add the presentation slides from the 2016 exercise.
+
 ## 0.2.0
 
   * Ensure a coffescript compatible version of PhantomJS.
