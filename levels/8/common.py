@@ -75,7 +75,7 @@ class PayloadProcessor(object):
 
     def respond(self, response):
         if self.request.notifyFinish():
-            self.log_error("Request already finished!")
+            self.log_info("Request already finished!")
         formatted = json.dumps(response) + '\n'
         self.log_info('Responding with: %r', formatted)
         self.request.write(formatted)

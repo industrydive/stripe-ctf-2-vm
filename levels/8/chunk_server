@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import os
 import logging
 import optparse
 import sys
@@ -12,19 +13,20 @@ logger = logging.getLogger('password_db')
 logger.addHandler(logging.StreamHandler(sys.stderr))
 
 class ChunkProcessor(common.PayloadProcessor):
-    def __init__(self, request, password_chunk):
+    def __init__(self, request, args):
         super(ChunkProcessor, self).__init__(request)
-        self.password_chunk = password_chunk
+        self.password_chunk, self.shared_key = args
 
     def process(self, data):
+        shared_key = self.getArg(data, 'shared_key')
         chunk = self.getArg(data, 'password_chunk')
-        success = chunk == self.password_chunk
+        success = (chunk == self.password_chunk and shared_key == self.shared_key)
         self.respond({
                 'success' : success
                 })
 
 def main():
-    usage = """%prog [-q ...] <host:port> <password_chunk>"""
+    usage = """%prog [-q ...] <host:port>"""
     parser = optparse.OptionParser(usage)
     parser.add_option('-q', '--quiet', help='Quietness of debugging output.',
                       dest='quiet', action='count', default=0)
@@ -36,14 +38,15 @@ def main():
     elif opts.quiet >= 2:
         logger.setLevel(logging.WARN)
 
-    if len(args) != 2:
+    if len(args) != 1:
         parser.print_usage()
         return 1
 
     address_spec = common.parseHost(args[0])
-    password_chunk = args[1]
+    password_chunk = os.environ['PASSWORD']
+    shared_key = os.environ['SHAREDKEY']
 
-    server = common.HTTPServer(ChunkProcessor, password_chunk)
+    server = common.HTTPServer(ChunkProcessor, [password_chunk, shared_key])
     common.listenTCP(address_spec, server)
     reactor.run()
 
