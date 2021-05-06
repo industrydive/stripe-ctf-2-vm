@@ -10,7 +10,7 @@ password to access Level 4).
 
 # To Run
 
-* Run `ctf-run 3` to start the server on port 5000.
+* If you're the first to make it to this level, ssh in and run `ctf-run 3` to start the server on port 5000.
 * Go to [http://ctf.dive.tools:5000](http://ctf.dive.tools:5000) in your browser.
 * Run `ctf-halt 3` to stop the server.
 

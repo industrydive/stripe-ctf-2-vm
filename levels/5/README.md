@@ -25,8 +25,8 @@ machine, but the effects are the same.
 
 # To Run
 
-* Run `ctf-run 5` to start the server on port 4568.
-* Run `ctf-run 2` to start the level 2 server on port 7000.
+* If you're the first to make it to this level, ssh in and run `ctf-run 5` to start the server on port 4568.
+* If you're the first to make it to this level, ssh in and run `ctf-run 2` to start the level 2 server on port 7000.
 * Go to [http://ctf.dive.tools:4568](http://ctf.dive.tools:4568) in your browser.
 * Run `ctf-halt 5; ctf-halt 2` to stop the servers.
 

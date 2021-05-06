@@ -50,8 +50,8 @@ automatically spins up 4 chunk servers and a primary server.
 
 # To Run
 
-* Run `ctf-run 8` to start the server on port 4000.
-* Run `ctf-run 2` to start the level 2 server on port 7000.
+* If you're the first to make it to this level, ssh in and run `ctf-run 8` to start the server on port 4000.
+* If you're the first to make it to this level, ssh in and run `ctf-run 2` to start the level 2 server on port 7000.
 * Go to [http://ctf.dive.tools:4000](http://ctf.dive.tools:4000) in your browser.
 * Run `ctf-halt 8; ctf-halt 2` to stop the server.
 

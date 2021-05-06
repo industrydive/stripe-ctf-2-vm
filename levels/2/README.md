@@ -7,6 +7,6 @@ You may even be able to find the password for Level 3 by doing so.
 
 # To Run
 
-* Run `ctf-run 2` to start the server on port 7000.
+* If you're the first to make it to this level, ssh in and run `ctf-run 2` to start the server on port 7000.
 * Go to [http://ctf.dive.tools:7000](http://ctf.dive.tools:7000) in your browser.
 * Run `ctf-halt 2` to stop the server.

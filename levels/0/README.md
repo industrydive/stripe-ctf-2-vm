@@ -7,6 +7,6 @@ knew how to [crack safes](http://en.wikipedia.org/wiki/Safe-cracking)...
 
 # Running
 
-- Run `ctf-run 0` to start the server on port 3000.
+- If you're the first to make it to this level, ssh in and run `ctf-run 0` to start the server on port 3000.
 - Go to [http://ctf.dive.tools:3000](http://ctf.dive.tools:3000) in your browser.
 - Run `ctf-halt 0` to stop the server.

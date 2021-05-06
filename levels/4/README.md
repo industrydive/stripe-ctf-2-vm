@@ -16,7 +16,7 @@ simulate human activity.
 
 # To Run
 
-* Run `ctf-run 4` to start the server on port 4567, and start the activities of
+* If you're the first to make it to this level, ssh in and run `ctf-run 4` to start the server on port 4567, and start the activities of
 the `karma_fountain` user.
 * Go to [http://ctf.dive.tools:4567](http://ctf.dive.tools:4567) in your browser.
 * Run `ctf-halt 4` to stop the server and the `karma_fountain` user
