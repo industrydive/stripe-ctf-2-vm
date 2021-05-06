@@ -52,7 +52,7 @@ automatically spins up 4 chunk servers and a primary server.
 
 * Run `ctf-run 8` to start the server on port 4000.
 * Run `ctf-run 2` to start the level 2 server on port 7000.
-* Go to [http://192.168.57.2:4000](http://192.168.57.2:4000) in your browser.
+* Go to [http://ctf.dive.tools:4000](http://ctf.dive.tools:4000) in your browser.
 * Run `ctf-halt 8; ctf-halt 2` to stop the server.
 
 [1]: http://linux.about.com/od/commands/l/blcmdl8_sshd.htm

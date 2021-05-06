@@ -27,7 +27,7 @@ machine, but the effects are the same.
 
 * Run `ctf-run 5` to start the server on port 4568.
 * Run `ctf-run 2` to start the level 2 server on port 7000.
-* Go to [http://192.168.57.2:4568](http://192.168.57.2:4568) in your browser.
+* Go to [http://ctf.dive.tools:4568](http://ctf.dive.tools:4568) in your browser.
 * Run `ctf-halt 5; ctf-halt 2` to stop the servers.
 
 [1]: http://openid.net/

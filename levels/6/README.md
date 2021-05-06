@@ -23,7 +23,7 @@ application so that other people can run their own Streamer instances.
 
 * Run `ctf-run 6` to start the server on port 4569, and start the activities of
 the `level07-password-holder` user.
-* Go to [http://192.168.57.2:4569](http://192.168.57.2:4569) in your browser.
+* Go to [http://ctf.dive.tools:4569](http://ctf.dive.tools:4569) in your browser.
 * Run `ctf-halt 6` to stop the server and the `level07-password-holder` user
 activities.
 

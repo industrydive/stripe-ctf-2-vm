@@ -27,7 +27,7 @@ installed in the VM.
 # To Run
 
 * Run `ctf-run 7` to start the server on port 9233.
-* Go to [http://192.168.57.2:9233](http://192.168.57.2:9233) in your browser.
+* Go to [http://ctf.dive.tools:9233](http://ctf.dive.tools:9233) in your browser.
 * Run `ctf-halt 7` to stop the server.
 
 [1]: http://tacocopter.com

@@ -11,5 +11,5 @@ just have to try all the possible combinations. Or will you...?
 # To Run
 
 * Run `ctf-run 1` to start the server on port 8000.
-* Go to [http://192.168.57.2:8000](http://192.168.57.2:8000) in your browser.
+* Go to [http://ctf.dive.tools:8000](http://ctf.dive.tools:8000) in your browser.
 * Run `ctf-halt 1` to stop the server.

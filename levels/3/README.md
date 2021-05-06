@@ -11,7 +11,7 @@ password to access Level 4).
 # To Run
 
 * Run `ctf-run 3` to start the server on port 5000.
-* Go to [http://192.168.57.2:5000](http://192.168.57.2:5000) in your browser.
+* Go to [http://ctf.dive.tools:5000](http://ctf.dive.tools:5000) in your browser.
 * Run `ctf-halt 3` to stop the server.
 
 [1]: http://www.oracle.com/us/technologies/linux/ubreakable-enterprise-kernel-linux-173350.html

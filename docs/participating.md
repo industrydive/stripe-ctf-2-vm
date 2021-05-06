@@ -76,7 +76,7 @@ chmod a+x /tmp/setup-ctf-adaptor.sh
 ```
 
 This will add the necessary network adaptor and start the server running at the
-IP address `192.168.57.2`. You can use the Virtualbox UI to start and stop the
+IP address `ctf.dive.tools`. You can use the Virtualbox UI to start and stop the
 server thereafter.
 
 ## Log In
@@ -85,11 +85,11 @@ Once you start the VM, you will need to log in in order to run server processes
 and unlock puzzle levels. E.g. for user `ctf`:
 
 ```
-ssh ctf@192.168.57.2
+ssh ctf@ctf.dive.tools
 
 # If your Bash profile forces key authentication, you might need to do this
 # instead:
-ssh -o PubkeyAuthentication=no ctf@192.168.57.2
+ssh -o PubkeyAuthentication=no ctf@ctf.dive.tools
 ```
 
 In your home directory, you find that each puzzle has a corresponding
